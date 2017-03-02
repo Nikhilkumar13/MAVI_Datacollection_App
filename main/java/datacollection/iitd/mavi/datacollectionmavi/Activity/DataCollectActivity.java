@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import datacollection.iitd.mavi.datacollectionmavi.Activity.LoginActivity;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataFormFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment;
+import datacollection.iitd.mavi.datacollectionmavi.Fragment.PopUpDialogFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent;
@@ -104,6 +106,15 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
 
     @Override
     public void onListFragmentInteraction(SignBoard item) {
+
+        PopUpDialogFragment popUpDialogFragment  = PopUpDialogFragment.newInstance(item);
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
+        /** Starting a FragmentTransaction */
+       FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        popUpDialogFragment.show(fragmentManager,"asd");
+
 
     }
 

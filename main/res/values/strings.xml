@@ -12,7 +12,9 @@
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="save_button_text">Save Form</string>
+    <string name="delete_button_text">Delete</string>
     <string name="reset_button_text">Reset Form</string>
+    <string name="ok_button_text">Okay</string>
     <string name="pick_place_button_text">Pick A Place</string>
     <string name="title_activity_data_collect">DataCollect</string>
     <string name="action_settings">Settings</string>

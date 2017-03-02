@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
 import java.security.AccessControlContext;
 
 import datacollection.iitd.mavi.datacollectionmavi.Helper.Constants;
@@ -14,7 +15,7 @@ import datacollection.iitd.mavi.datacollectionmavi.Helper.FileUtils;
  * Created by nikhil on 2/3/17.
  */
 
-public class SignBoard {
+public class SignBoard  implements Serializable{
 
     private int mId;
     private String mName;

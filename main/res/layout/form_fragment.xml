@@ -95,7 +95,7 @@
                 android:layout_marginBottom="12dp"
                 android:background="@android:color/darker_gray"
                 android:scaleType="centerCrop"
-                android:contentDescription="Profile Image" />
+                android:contentDescription="SignBoard Image" />
 
         </LinearLayout>
 

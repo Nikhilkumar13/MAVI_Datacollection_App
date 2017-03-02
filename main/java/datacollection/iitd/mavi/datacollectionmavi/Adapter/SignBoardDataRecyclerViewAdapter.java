@@ -1,14 +1,19 @@
 package datacollection.iitd.mavi.datacollectionmavi.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment.OnListFragmentInteractionListener;
+import datacollection.iitd.mavi.datacollectionmavi.Fragment.PopUpDialogFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 
@@ -41,19 +46,35 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
         holder.Name.setText(sb.getName());
         holder.Comment.setText(sb.getComment());
         holder.Thumbnail.setImageDrawable(sb.getThumbnail(mContext));
+        holder.mView.setTag(position);
 
-//
-//        holder.mView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (null != mListener) {
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //                if (null != mListener) {.
 //                    // Notify the active callbacks interface (the activity, if the
 //                    // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction();
+                    mListener.onListFragmentInteraction(mSignboard.get(Integer.valueOf(v.getTag().toString())));
 //                }
-//            }
-//        });
-    }
+
+//                Toast.makeText(mContext,"Clicked" +String.valueOf(),Toast.LENGTH_SHORT).show();
+
+
+//
+//                /** Getting the previously created fragment object from the fragment manager */
+//                TimeDialogFragment tPrev =  ( TimeDialogFragment ) fragmentManager.findFragmentByTag("time_dialog");
+//
+//                /** If the previously created fragment object still exists, then that has to be removed */
+//                if(tPrev!=null)
+//                    fragmentTransaction.remove(tPrev);
+//
+//                /** Opening the fragment object */
+//                tFragment.show(fragmentTransaction, "time_dialog");
+            }
+        });
+
+            }
 
 
 
