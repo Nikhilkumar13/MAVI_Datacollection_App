@@ -1,4 +1,4 @@
-package datacollection.iitd.mavi.datacollectionmavi;
+package datacollection.iitd.mavi.datacollectionmavi.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import datacollection.iitd.mavi.datacollectionmavi.DataListFragment.OnListFragmentInteractionListener;
+import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment.OnListFragmentInteractionListener;
+import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent.DummyItem;
 
 import java.util.List;

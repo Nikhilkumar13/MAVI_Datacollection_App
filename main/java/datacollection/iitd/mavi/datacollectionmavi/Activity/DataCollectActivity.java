@@ -1,4 +1,4 @@
-package datacollection.iitd.mavi.datacollectionmavi;
+package datacollection.iitd.mavi.datacollectionmavi.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +15,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import datacollection.iitd.mavi.datacollectionmavi.Activity.LoginActivity;
+import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataFormFragment;
+import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment;
+import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent;
 
 public class DataCollectActivity extends AppCompatActivity implements DataFormFragment.OnFragmentInteractionListener, DataListFragment.OnListFragmentInteractionListener {

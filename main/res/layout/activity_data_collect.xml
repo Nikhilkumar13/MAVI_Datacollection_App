@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="datacollection.iitd.mavi.datacollectionmavi.DataCollectActivity">
+    tools:context="datacollection.iitd.mavi.datacollectionmavi.Activity.DataCollectActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

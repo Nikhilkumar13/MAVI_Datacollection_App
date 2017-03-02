@@ -1,4 +1,4 @@
-package datacollection.iitd.mavi.datacollectionmavi;
+package datacollection.iitd.mavi.datacollectionmavi.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import datacollection.iitd.mavi.datacollectionmavi.R;
+import datacollection.iitd.mavi.datacollectionmavi.Adapter.SignBoardDataRecyclerViewAdapter;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent.DummyItem;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.

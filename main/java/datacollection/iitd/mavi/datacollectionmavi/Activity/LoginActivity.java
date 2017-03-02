@@ -1,4 +1,4 @@
-package datacollection.iitd.mavi.datacollectionmavi;
+package datacollection.iitd.mavi.datacollectionmavi.Activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -34,6 +34,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import datacollection.iitd.mavi.datacollectionmavi.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
