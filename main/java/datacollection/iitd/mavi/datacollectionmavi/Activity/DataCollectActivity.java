@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import datacollection.iitd.mavi.datacollectionmavi.Activity.LoginActivity;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataFormFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment;
+import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent;
 
@@ -32,6 +33,9 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    private  DataFormFragment mdataFormFragment;
+    private DataListFragment mdataListFragment;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -93,12 +97,13 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction() {
+        mdataListFragment.reLoadListData();
 
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(SignBoard item) {
 
     }
 
@@ -124,12 +129,14 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
 
             if(position==0)
             {
-                return DataFormFragment.newInstance();
+                mdataFormFragment=DataFormFragment.newInstance();
+                return  mdataFormFragment;
 
             }
             else
             {
-                return  DataListFragment.newInstance(1);
+                mdataListFragment =  DataListFragment.newInstance();
+                return  mdataListFragment;
 
             }
         }

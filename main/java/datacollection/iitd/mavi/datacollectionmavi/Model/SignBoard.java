@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import java.security.AccessControlContext;
+
 import datacollection.iitd.mavi.datacollectionmavi.Helper.Constants;
 import datacollection.iitd.mavi.datacollectionmavi.Helper.FileUtils;
 
@@ -90,6 +92,7 @@ public class SignBoard {
      * Image.
      *
      * @return Thumbnail of the Signboard
+     * @param context
      */
 
     public Drawable getThumbnail(Context context) {

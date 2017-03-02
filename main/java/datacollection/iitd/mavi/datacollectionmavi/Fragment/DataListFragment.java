@@ -6,10 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import datacollection.iitd.mavi.datacollectionmavi.Database.MySQLiteHelper;
+import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.Adapter.SignBoardDataRecyclerViewAdapter;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent;
@@ -29,6 +35,13 @@ public class DataListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    private List<SignBoard> mSignboard;
+    private MySQLiteHelper db;
+
+    private SignBoardDataRecyclerViewAdapter mAdapter;
+
+
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -38,27 +51,33 @@ public class DataListFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static DataListFragment newInstance(int columnCount) {
+    public static DataListFragment newInstance() {
         DataListFragment fragment = new DataListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_COLUMN_COUNT, columnCount);
+//        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db=  new MySQLiteHelper( getActivity());
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+//        if (getArguments() != null) {
+//            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+//        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_data_list, container, false);
+
+        mSignboard = new ArrayList();
+        mSignboard = db.getAllCustomers();
+
+        mAdapter = new SignBoardDataRecyclerViewAdapter(getContext(),mSignboard, mListener);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -69,7 +88,7 @@ public class DataListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new SignBoardDataRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
@@ -92,6 +111,15 @@ public class DataListFragment extends Fragment {
         mListener = null;
     }
 
+
+    public void reLoadListData()
+    {
+        mSignboard = db.getAllCustomers();
+        mAdapter.setData(mSignboard);
+        mAdapter.notifyDataSetChanged();
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -104,6 +132,6 @@ public class DataListFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(SignBoard item);
     }
 }
