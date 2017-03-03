@@ -1,12 +1,16 @@
 package datacollection.iitd.mavi.datacollectionmavi.Fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +29,9 @@ public class PopUpDialogFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String SIGNBOARD_KEY= "mysignboard";
     private SignBoard mSignBoard;
+
+
+    Button mDelete , mOkay;
 
     private OnPopUpFragmentInteractionListener mListener;
 
@@ -55,33 +62,73 @@ public class PopUpDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_pop_up_dialog, container, false);
-        TextView tv = (TextView) v.findViewById(R.id.tv);
+        TextView name = (TextView) v.findViewById(R.id.name_textview);
         ImageView im = (ImageView) v.findViewById(R.id.signboard_image);
+        mDelete = (Button) v.findViewById(R.id.delete_button);
+        mOkay = (Button) v.findViewById(R.id.okay_button);
+       TextView lat= (TextView) v.findViewById(R.id.lat_textview);
+       TextView lng= (TextView) v.findViewById(R.id.lng_textview);
+       TextView angle= (TextView) v.findViewById(R.id.angle_textview);
+       TextView comment= (TextView) v.findViewById(R.id.comment_textview);
         im.setImageDrawable(mSignBoard.getImage(getActivity()));
-//        tv.setText(mSignBoard.getName());
-//        tv.setText("he"));
+
+        name.setText(mSignBoard.getName());
+        lng.setText(mSignBoard.getLong());
+        angle.setText("Angle :  " + String.valueOf(mSignBoard.getAngle()));
+        comment.setText(mSignBoard.getComment());
+        lat.setText(mSignBoard.getLat());
+        mOkay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                 getDialog().dismiss();
+            }
+        });
+
+        mDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
-        // Inflate the layout for this fragment
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Title")
+                        .setMessage("Do you really want to Delete whatever?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                mListener.onPopUpFragmentInteraction(mSignBoard);
+                                getDialog().dismiss();
+
+
+
+
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+
+
+            }
+        });
+
         return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(SignBoard mSignBoard) {
         if (mListener != null) {
-            mListener.onPopUpFragmentInteraction(uri);
+            mListener.onPopUpFragmentInteraction(mSignBoard);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnPopUpFragmentInteractionListener) {
-//            mListener = (OnPopUpFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        if (context instanceof OnPopUpFragmentInteractionListener) {
+            mListener = (OnPopUpFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -89,6 +136,7 @@ public class PopUpDialogFragment extends DialogFragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -102,6 +150,6 @@ public class PopUpDialogFragment extends DialogFragment {
      */
     public interface OnPopUpFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onPopUpFragmentInteraction(Uri uri);
+        void onPopUpFragmentInteraction(SignBoard signBoard);
     }
 }

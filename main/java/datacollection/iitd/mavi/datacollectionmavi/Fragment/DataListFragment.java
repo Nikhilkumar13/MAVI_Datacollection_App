@@ -1,6 +1,7 @@
 package datacollection.iitd.mavi.datacollectionmavi.Fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -27,13 +28,14 @@ import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent.DummyItem;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class DataListFragment extends Fragment {
+public class DataListFragment extends Fragment  {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
 
     private List<SignBoard> mSignboard;
     private MySQLiteHelper db;
@@ -62,7 +64,7 @@ public class DataListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db=  new MySQLiteHelper( getActivity());
+        db=  new MySQLiteHelper(getActivity());
 
 //        if (getArguments() != null) {
 //            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -120,6 +122,13 @@ public class DataListFragment extends Fragment {
 
     }
 
+  public  void  deleteSignboard( long id)
+  {
+      db.deleteSignboard(id);
+      reLoadListData();
+
+
+  }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

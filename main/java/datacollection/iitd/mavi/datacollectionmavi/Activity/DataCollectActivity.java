@@ -24,7 +24,7 @@ import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent;
 
-public class DataCollectActivity extends AppCompatActivity implements DataFormFragment.OnFragmentInteractionListener, DataListFragment.OnListFragmentInteractionListener {
+public class DataCollectActivity extends AppCompatActivity implements DataFormFragment.OnFragmentInteractionListener, DataListFragment.OnListFragmentInteractionListener , PopUpDialogFragment.OnPopUpFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -115,6 +115,12 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         popUpDialogFragment.show(fragmentManager,"asd");
 
+
+    }
+
+    @Override
+    public void onPopUpFragmentInteraction(SignBoard signBoard) {
+        mdataListFragment.deleteSignboard(signBoard.getId());
 
     }
 

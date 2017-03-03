@@ -127,6 +127,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     Log.e(TAG, "Unable to add Customer to database " + e.getMessage());
                 }
                 //Close database connection
+
                 database.close();
             }
         }
@@ -150,5 +151,31 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
         }
         return false;
+    }
+
+    public boolean deleteSignboard(long id)
+    {
+        boolean flag=false;
+
+        //Lock database for writing
+        synchronized (databaseLock) {
+            //Get a writable database
+            SQLiteDatabase database = getWritableDatabase();
+
+            //Ensure the database exists
+            if (database != null) {
+
+                try {
+                   flag= database.delete(TABLE_SIGNBOARD, Constants.COLUMN_SIGNBOARD_ID  + " = " + id, null)>1;
+                } catch (Exception e) {
+                    Log.e(TAG, "Unable to Delete Signboard to database " + e.getMessage());
+                    flag=false;
+                }
+                //Close database connection
+
+                database.close();
+            }
+        }
+        return flag;
     }
 }
