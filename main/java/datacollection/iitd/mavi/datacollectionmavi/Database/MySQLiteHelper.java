@@ -48,7 +48,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + Constants.COLUMN_LAT + " TEXT, "
             + Constants.COLUMN_IMAGE_PATH + " TEXT, "
             + Constants.COLUMN_COMMENT + " TEXT, "
-            + Constants.COLUMN_LONG + " TEXT) ";
+            + Constants.COLUMN_LONG + " TEXT, "
+            + Constants.COLUMN_CATEGORY + " TEXT, "
+            + Constants.COLUMN_PUSHEDTOSERVER + " BOOLEAN DEFAULT FALSE) ";
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIGNBOARD);
@@ -97,6 +99,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         customer.setComment(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_COMMENT)));
         customer.setLat(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_LAT)));
         customer.setLong(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_LONG)));
+        customer.setLong(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_LONG)));
+        customer.setCategory(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_CATEGORY)));
         customer.setImagePath(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_IMAGE_PATH)));
         return customer;
     }
@@ -119,6 +123,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 values.put(Constants.COLUMN_LAT, signBoard.getLat());
                 values.put(Constants.COLUMN_LONG, signBoard.getLong());
                 values.put(Constants.COLUMN_IMAGE_PATH, signBoard.getImagePath());
+                values.put(Constants.COLUMN_CATEGORY, signBoard.getCategory());
 
                 //Attempt to insert the client information into the transaction table
                 try {

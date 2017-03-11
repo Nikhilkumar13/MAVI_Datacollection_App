@@ -25,6 +25,26 @@ public class SignBoard  implements Serializable{
     private String mImagePath;
     private String mComment;
 
+    public Boolean getIsPushed() {
+        return mIsPushed;
+    }
+
+    public void setIsPushed(Boolean mIsPushed) {
+        this.mIsPushed = mIsPushed;
+    }
+
+    private Boolean mIsPushed;
+
+    public String getCategory() {
+        return mCategory;
+    }
+
+    public void setCategory(String mCategory) {
+        this.mCategory = mCategory;
+    }
+
+    private String mCategory;
+
 
     public String getComment() {
         return mComment;

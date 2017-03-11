@@ -23,6 +23,8 @@ public class Constants {
     public static final String COLUMN_LONG = "lng";
     public static final String COLUMN_COMMENT = "comment";
     public static final String COLUMN_IMAGE_PATH = "imagePath";
+    public static final String COLUMN_CATEGORY= "category";
+    public static final String COLUMN_PUSHEDTOSERVER= "server";
 
     public static final String KEY_IMAGE_URI = "image_uri";
 

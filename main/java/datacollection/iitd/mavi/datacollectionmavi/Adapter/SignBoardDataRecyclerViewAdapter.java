@@ -79,6 +79,12 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
 
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+
+    @Override
     public int getItemCount() {
         return mSignboard.size();
     }

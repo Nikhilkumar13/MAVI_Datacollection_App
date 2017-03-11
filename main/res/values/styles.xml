@@ -6,12 +6,25 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/AppPreferenceTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="AppPreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <!--<item name="preferenceFragmentCompatStyle">@style/AppPreferenceFragmentCompatStyle</item>-->
+    </style>
+    <!--<style name="AppPreferenceFragmentCompatStyle" parent="@style/PreferenceFragment.Material">-->
+        <!--&lt;!&ndash; Custom layout for PreferenceFragmentCompat &ndash;&gt;-->
+        <!--<item name="android:layout">@layout/pref_screen</item>-->
+    <!--</style>-->
+
+
+
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

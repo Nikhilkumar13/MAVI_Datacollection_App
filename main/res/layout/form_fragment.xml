@@ -64,8 +64,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp">
+
                 <Button
                     android:id="@+id/place_picker_button"
                     android:layout_width="match_parent"
@@ -82,17 +85,28 @@
 
 
             </LinearLayout>
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/category_edittext"
+                android:hint="signboard, warning"/>
 
             <android.support.v7.widget.AppCompatEditText
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment_edittext"
                 android:hint="Type any Note or Comment"/>
+
             <ImageButton
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:id="@+id/signboard_image_button"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginBottom="12dp"
                 android:background="@android:color/darker_gray"
                 android:scaleType="centerCrop"
                 android:contentDescription="SignBoard Image" />
@@ -104,7 +118,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:layout_marginTop="30dp"
             android:orientation="horizontal"
             android:paddingLeft="30dp"
             android:paddingRight="30dp">

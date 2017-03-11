@@ -20,6 +20,7 @@ import datacollection.iitd.mavi.datacollectionmavi.Activity.LoginActivity;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataFormFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.PopUpDialogFragment;
+import datacollection.iitd.mavi.datacollectionmavi.Fragment.SettingsFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent;
@@ -81,6 +82,10 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            Intent intent = new Intent(this,SettingActivity.class);
+            startActivity(intent);
+
             return true;
         }
         if(id==R.id.logout)

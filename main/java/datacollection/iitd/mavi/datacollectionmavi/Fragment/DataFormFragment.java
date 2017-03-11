@@ -62,7 +62,7 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private Sensor mCompass;
-    private TextView mSenserTextView ,mNameEditText ,mAngleEditText, mCommentEditText ,mPlaceEditText;
+    private TextView mSenserTextView ,mNameEditText ,mAngleEditText, mCommentEditText ,mPlaceEditText, mCategoryEditText;
     private  Button mSaveButton ,mPlacePickerButton;
     //Image properties
     private String mCurrentImagePath = null;
@@ -83,6 +83,7 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
     {
         mSenserTextView = (TextView) mRootView.findViewById(R.id.compass_textview);
         mNameEditText = (TextView) mRootView.findViewById(R.id.signboard_name_edittext);
+        mCategoryEditText = (TextView) mRootView.findViewById(R.id.category_edittext);
         mAngleEditText= (TextView) mRootView.findViewById(R.id.angle_edittext);
         mCommentEditText= (TextView) mRootView.findViewById(R.id.comment_edittext);
         mPlaceEditText= (TextView) mRootView.findViewById(R.id.place_edittext);
@@ -275,6 +276,8 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
         mSignboard.setAngle(Integer.valueOf(mAngleEditText.getText().toString()));
         mSignboard.setLat(String.valueOf(mPlace.getLatLng().latitude));
         mSignboard.setLong(String.valueOf(mPlace.getLatLng().longitude));
+        mSignboard.setCategory(mCategoryEditText.getText().toString().toLowerCase());
+        mSignboard.setIsPushed(Boolean.FALSE);
 
         //Check to see if there is valid image path temporarily in memory
         //Then save that image path to the database and that becomes the profile
@@ -441,6 +444,8 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
         return true;
 
     }
+
+
 
 
 
