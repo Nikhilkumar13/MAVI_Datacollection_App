@@ -24,6 +24,8 @@ public class SignBoard  implements Serializable{
     private String mLong;
     private String mImagePath;
     private String mComment;
+    private boolean mIsPushed;
+
 
     public Boolean getIsPushed() {
         return mIsPushed;
@@ -33,7 +35,6 @@ public class SignBoard  implements Serializable{
         this.mIsPushed = mIsPushed;
     }
 
-    private Boolean mIsPushed;
 
     public String getCategory() {
         return mCategory;

@@ -17,6 +17,9 @@
             android:defaultValue="Default value"
             android:hint="IP Address"
             />
+        <Preference
+            android:key="token"
+            android:title="Token" />
         <!--<android.support.v7.preference.CheckBoxPreference-->
             <!--android:key="key3"-->
             <!--android:title="CheckBox Preference"-->

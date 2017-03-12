@@ -1,8 +1,10 @@
 package datacollection.iitd.mavi.datacollectionmavi.Activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +15,33 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import datacollection.iitd.mavi.datacollectionmavi.Activity.LoginActivity;
+import datacollection.iitd.mavi.datacollectionmavi.Database.MySQLiteHelper;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataFormFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.PopUpDialogFragment;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.SettingsFragment;
+import datacollection.iitd.mavi.datacollectionmavi.Helper.Constants;
 import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.dummy.DummyContent;
@@ -36,9 +57,13 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private String TAG = "DATACOLLECTACTIVITY";
 
     private  DataFormFragment mdataFormFragment;
     private DataListFragment mdataListFragment;
+    private boolean mIsLock=false;
+    RequestQueue mQueue  ;
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -62,6 +87,7 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        mQueue=Volley.newRequestQueue(this);
 
     }
 
@@ -88,15 +114,26 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
 
             return true;
         }
+
         if(id==R.id.logout)
         {
-            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("isLoggedIn", false); // Storing boolean - true/false
             editor.commit();
 
             startActivity( new Intent(this, LoginActivity.class));
             finish();
+
+        }
+
+        if(id==R.id.push_to_server && !mIsLock){
+            Toast.makeText(getApplicationContext(),"Trying to Push UnPushed Data to Server",Toast.LENGTH_LONG).show();
+
+
+            mIsLock=true;
+
+
 
         }
 
@@ -165,7 +202,7 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 2 total pages.
             return 2;
         }
 
@@ -173,11 +210,70 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Form";
+                    return getString(R.string.form_tittle);
                 case 1:
-                    return "Data Stored";
+                    return getString(R.string.stored_data_tittle);
             }
             return null;
         }
+    }
+
+
+    public JsonObjectRequest createRequestObject(SignBoard sb ,String URL)
+    {
+
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("name", sb.getName());
+        params.put("angle", String.valueOf(sb.getAngle()));
+
+
+//        String url= "http://"+ + Constants.DATA_URL;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, new JSONObject(params), new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                String token=null;
+                try {
+                    token =response.getString("token");
+                    Log.d(TAG, token);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                showProgress(false);
+
+                boolean  success=true;
+
+
+                if (success) {
+//                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                    SharedPreferences.Editor editor = pref.edit();
+                   //Youmay check if user has asked to delete the local Stored data after pushed to Server in prefrence.
+                    //Update Flag or Data Accordingly.
+
+
+                } else {
+                    //SHow toast Message to User that failed to post
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+
+
+
+            }
+        } );
+         return jsonObjectRequest;
+
+
     }
 }

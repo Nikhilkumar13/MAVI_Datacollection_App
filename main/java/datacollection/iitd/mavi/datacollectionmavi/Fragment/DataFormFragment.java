@@ -277,7 +277,7 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
         mSignboard.setLat(String.valueOf(mPlace.getLatLng().latitude));
         mSignboard.setLong(String.valueOf(mPlace.getLatLng().longitude));
         mSignboard.setCategory(mCategoryEditText.getText().toString().toLowerCase());
-        mSignboard.setIsPushed(Boolean.FALSE);
+        mSignboard.setIsPushed(false);
 
         //Check to see if there is valid image path temporarily in memory
         //Then save that image path to the database and that becomes the profile

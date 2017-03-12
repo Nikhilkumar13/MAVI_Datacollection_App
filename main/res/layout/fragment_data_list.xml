@@ -9,6 +9,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:background="@color/cardview_dark_background"
     app:layoutManager="LinearLayoutManager"
     tools:context="datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment"
     tools:listitem="@layout/fragment_data" />

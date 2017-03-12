@@ -1,6 +1,7 @@
 package datacollection.iitd.mavi.datacollectionmavi.Adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -47,6 +48,18 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
         holder.Comment.setText(sb.getComment());
         holder.Thumbnail.setImageDrawable(sb.getThumbnail(mContext));
         holder.mView.setTag(position);
+        if(sb.getIsPushed())
+        {
+//            Drawable dr= get
+            holder.Sign.setImageResource(R.drawable.check);
+
+        }
+        else
+        {
+            holder.Sign.setImageResource(R.drawable.close);
+
+
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +118,7 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
         private TextView Name;
         private TextView Comment;
         private ImageView Thumbnail;
+        private ImageView Sign;
 
         public ViewHolder(View view) {
             super(view);
@@ -112,6 +126,7 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
             Name = (TextView) view.findViewById(R.id.signboard_name_textview);
             Comment = (TextView) view.findViewById(R.id.signboard_comment_textview);
             Thumbnail = (ImageView) view.findViewById(R.id.signboard_image_thumbnail);
+            Sign= (ImageView) view.findViewById(R.id.tick_or_cross_image);
         }
 
 

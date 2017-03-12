@@ -2,6 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="datacollection.iitd.mavi.datacollectionmavi.Activity.DataCollectActivity">
+
+    <item
+        android:id="@+id/push_to_server"
+        android:orderInCategory="100"
+        android:title="@string/push_to_server"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

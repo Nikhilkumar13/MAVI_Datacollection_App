@@ -90,6 +90,42 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
 
     }
+    public List<SignBoard> getUnPushedCustomers() {
+        //Initialize an empty list of Customers
+        List<SignBoard> signboardList = new ArrayList<SignBoard>();
+
+        //Command to select all Customers
+        String selectQuery = "SELECT * FROM " + TABLE_SIGNBOARD  + " WHERE " +Constants.COLUMN_PUSHEDTOSERVER +" = False";
+
+        //lock database for reading
+        synchronized (databaseLock) {
+            //Get a readable database
+            SQLiteDatabase database = getReadableDatabase();
+
+            //Make sure database is not empty
+            if (database != null) {
+
+                //Get a cursor for all Customers in the database
+                Cursor cursor = database.rawQuery(selectQuery, null);
+                if (cursor.moveToFirst()) {
+                    while (!cursor.isAfterLast()) {
+                        SignBoard  signboard = getSignboard(cursor);
+                        signboardList.add(signboard);
+                        cursor.moveToNext();
+                    }
+                }
+                //Close the database connection
+                database.close();
+            }
+            //Return the list of customers
+            return signboardList;
+        }
+
+    }
+
+
+
+
 
     private static SignBoard getSignboard(Cursor cursor) {
         SignBoard customer = new SignBoard();

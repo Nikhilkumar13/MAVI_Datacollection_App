@@ -39,4 +39,7 @@ public class Constants {
     public static final String PICTURE_DIRECTORY = Environment.getExternalStorageDirectory()
             + File.separator + "DCIM" + File.separator + "ProfilePicture" + File.separator;
 
+    public static final String LOGIN_URL="/mavi/api/obtain-token/";
+    public static final String DATA_URL="/mavi/api/signboards";
+
 }
