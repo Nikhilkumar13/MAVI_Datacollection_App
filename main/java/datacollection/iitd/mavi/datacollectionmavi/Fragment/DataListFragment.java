@@ -1,8 +1,10 @@
 package datacollection.iitd.mavi.datacollectionmavi.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,11 +13,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import datacollection.iitd.mavi.datacollectionmavi.Database.MySQLiteHelper;
+import datacollection.iitd.mavi.datacollectionmavi.Helper.Constants;
+import datacollection.iitd.mavi.datacollectionmavi.Helper.FileUtils;
 import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 import datacollection.iitd.mavi.datacollectionmavi.Adapter.SignBoardDataRecyclerViewAdapter;
@@ -35,12 +57,17 @@ public class DataListFragment extends Fragment  {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+   private String TAG="DATA List Fragment";
 
 
     private List<SignBoard> mSignboard;
     private MySQLiteHelper db;
 
     private SignBoardDataRecyclerViewAdapter mAdapter;
+    private boolean mIsLock=false;
+    RequestQueue mQueue  ;
+
+
 
 
 
@@ -65,6 +92,8 @@ public class DataListFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db=  new MySQLiteHelper(getActivity());
+        mQueue= Volley.newRequestQueue(getContext());
+
 
 //        if (getArguments() != null) {
 //            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -78,6 +107,7 @@ public class DataListFragment extends Fragment  {
 
         mSignboard = new ArrayList();
         mSignboard = db.getAllCustomers();
+
 
         mAdapter = new SignBoardDataRecyclerViewAdapter(getContext(),mSignboard, mListener);
 
@@ -142,5 +172,154 @@ public class DataListFragment extends Fragment  {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(SignBoard item);
+    }
+
+
+    public void pushData()
+    {
+
+        Toast.makeText(getContext(),"Trying to Push UnPushed Data to Server",Toast.LENGTH_LONG).show();
+
+        Thread tr= new Thread()
+        {
+            @Override
+            public void run() {
+                mIsLock=true;
+
+                List <SignBoard> signBoards=db.getUnPushedCustomers();
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+                String url= "http://"+ pref.getString("ip","Ip not set")+ Constants.DATA_URL;
+                String token=pref.getString("token","tokennoteset");
+
+
+                for(SignBoard signBoard : signBoards)
+                {
+                    mQueue.add(createRequestObject(signBoard,url ,token));
+
+                }
+
+
+                mIsLock=false;
+
+
+            }
+        };
+        tr.start();
+
+
+    }
+    public JsonObjectRequest createRequestObject(SignBoard sb , String URL, final String token) {
+
+
+//        Map<String, String> params = new HashMap<String, String>();
+       JSONObject params= new JSONObject();
+        try {
+            params.put("name", sb.getName());
+
+        params.put("angle", String.valueOf(sb.getAngle()));
+      JSONObject location = new JSONObject();
+        location.put("lat", String.valueOf(sb.getLat()));
+        location.put("lon", String.valueOf(sb.getLong()));
+        String[] category_tags = sb.getCategory().split(",");
+
+        params.put("location", location);
+        params.put("category_tags", new JSONArray(category_tags));
+        String [] data = {};
+        params.put("data", new JSONArray(data));
+        params.put("image", FileUtils.getImageToBase64(sb.getImagePath()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        params.put("image","somrandomstring");
+        Log.d("Our object", params.toString());
+
+
+//        String url= "http://"+ + Constants.DATA_URL;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+//                showProgress(false);
+
+                boolean success = true;
+
+
+                if (success) {
+
+//                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                    SharedPreferences.Editor editor = pref.edit();
+                    //Youmay check if user has asked to delete the local Stored data after pushed to Server in prefrence.
+                    //Update Flag or Data Accordingly.
+                    Log.d(TAG, "Doing Good");
+
+
+                } else {
+                    //SHow toast Message to User that failed to post
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error", "Error: " + error.getMessage());
+                System.out.print(error.getMessage());
+                String json = null;
+
+                NetworkResponse response = error.networkResponse;
+                if(response != null && response.data != null){
+                    switch(response.statusCode){
+                        case 400:
+                            json = new String(response.data);
+                            json = trimMessage(json, "message");
+                            if(json != null) displayMessage(json);
+                            break;
+                    }
+                    //Additional cases
+                }
+
+
+            }
+
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+
+                params.put("Authorization", "Token "+token);
+//                params.put("Content-Type", "application/json");
+                return params;
+            }
+        }
+
+
+                ;
+        return jsonObjectRequest;
+
+
+    }
+
+    public String trimMessage(String json, String key){
+        String trimmedString = null;
+
+        try{
+            JSONObject obj = new JSONObject(json);
+            trimmedString = obj.getString(key);
+        } catch(JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return trimmedString;
+    }
+
+    public void displayMessage(String toastString){
+        Toast.makeText(getContext(), toastString, Toast.LENGTH_LONG).show();
     }
 }

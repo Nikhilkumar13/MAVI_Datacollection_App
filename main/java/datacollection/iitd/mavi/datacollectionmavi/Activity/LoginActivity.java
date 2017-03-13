@@ -36,6 +36,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -358,14 +359,17 @@ public class LoginActivity extends AppCompatActivity  {
                      @Override
                      public void onResponse(JSONObject response) {
                          String token=null;
+                         boolean  success=true;
                          try {
                               token =response.getString("token");
                              Log.d(TAG, token);
                          } catch (JSONException e) {
                              e.printStackTrace();
+                             success=false;
+
                          }
                          showProgress(false);
-                        boolean  success=true;
+
 
 
                          if (success) {
@@ -396,11 +400,10 @@ public class LoginActivity extends AppCompatActivity  {
              public void onErrorResponse(VolleyError error) {
                  VolleyLog.d(TAG, "Error: " + error.getMessage());
 
-//                        pDialog.hide();
+                 Toast.makeText(getApplicationContext(),"Error: Unable to reach the Server",Toast.LENGTH_LONG).show();
 
                  showProgress(false);
-                 mPasswordView.setError(getString(R.string.error_incorrect_password));
-                 mPasswordView.requestFocus();
+
 
              }
          });

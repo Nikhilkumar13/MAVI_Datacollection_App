@@ -24,14 +24,14 @@ public class SignBoard  implements Serializable{
     private String mLong;
     private String mImagePath;
     private String mComment;
-    private boolean mIsPushed;
+    private int mIsPushed;
 
 
-    public Boolean getIsPushed() {
+    public int getIsPushed() {
         return mIsPushed;
     }
 
-    public void setIsPushed(Boolean mIsPushed) {
+    public void setIsPushed(int mIsPushed) {
         this.mIsPushed = mIsPushed;
     }
 

@@ -11,7 +11,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -217,6 +219,22 @@ public class FileUtils {
 
         // Return sample size.
         return inSampleSize;
+    }
+    public static String getImageToBase64(String path){
+        Bitmap bm = null;
+        ByteArrayOutputStream baos = null;
+        byte[] b = null;
+        String encodeString = null;
+        try{
+            bm = BitmapFactory.decodeFile(path);
+            baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            b = baos.toByteArray();
+            encodeString = Base64.encodeToString(b, Base64.DEFAULT);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return encodeString;
     }
 
 

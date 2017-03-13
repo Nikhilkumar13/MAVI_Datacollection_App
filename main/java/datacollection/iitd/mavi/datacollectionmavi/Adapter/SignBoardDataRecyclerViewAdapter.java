@@ -48,7 +48,7 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
         holder.Comment.setText(sb.getComment());
         holder.Thumbnail.setImageDrawable(sb.getThumbnail(mContext));
         holder.mView.setTag(position);
-        if(sb.getIsPushed())
+        if(sb.getIsPushed()==1)
         {
 //            Drawable dr= get
             holder.Sign.setImageResource(R.drawable.check);

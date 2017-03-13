@@ -50,7 +50,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + Constants.COLUMN_COMMENT + " TEXT, "
             + Constants.COLUMN_LONG + " TEXT, "
             + Constants.COLUMN_CATEGORY + " TEXT, "
-            + Constants.COLUMN_PUSHEDTOSERVER + " BOOLEAN DEFAULT FALSE) ";
+            + Constants.COLUMN_PUSHEDTOSERVER + " INTEGER DEFAULT 0 ) ";
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIGNBOARD);
@@ -95,7 +95,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         List<SignBoard> signboardList = new ArrayList<SignBoard>();
 
         //Command to select all Customers
-        String selectQuery = "SELECT * FROM " + TABLE_SIGNBOARD  + " WHERE " +Constants.COLUMN_PUSHEDTOSERVER +" = False";
+        String selectQuery = "SELECT * FROM " + TABLE_SIGNBOARD  + " WHERE " +Constants.COLUMN_PUSHEDTOSERVER +" = 0";
 
         //lock database for reading
         synchronized (databaseLock) {
