@@ -27,4 +27,19 @@
             <!--android:defaultValue="true"/>-->
     </android.support.v7.preference.PreferenceCategory>
 
+    <android.support.v7.preference.PreferenceCategory
+
+       android:title="Local Settings" >
+        <android.support.v7.preference.CheckBoxPreference
+            android:key="deletelocal"
+            android:title="Delete data after pushing to server"
+            android:summary="CheckBox Summary"
+            android:defaultValue="false"/>
+
+
+
+    </android.support.v7.preference.PreferenceCategory>
+
+
+
 </android.support.v7.preference.PreferenceScreen>

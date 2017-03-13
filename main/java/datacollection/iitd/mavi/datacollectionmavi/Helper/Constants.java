@@ -13,7 +13,7 @@ import datacollection.iitd.mavi.datacollectionmavi.R;
 public class Constants {
 
     public static final String ARG_SECTION_NUMBER = "section_number";
-    public static final String ARG_CUST_ID = "customer_id";
+//    public static final String ARG_CUST_ID = "customer_id";
 
 
     public static final String COLUMN_SIGNBOARD_ID = "_id";

@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import datacollection.iitd.mavi.datacollectionmavi.Helper.Constants;
@@ -50,7 +52,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + Constants.COLUMN_COMMENT + " TEXT, "
             + Constants.COLUMN_LONG + " TEXT, "
             + Constants.COLUMN_CATEGORY + " TEXT, "
-            + Constants.COLUMN_PUSHEDTOSERVER + " INTEGER DEFAULT 0 ) ";
+            + Constants.COLUMN_PUSHEDTOSERVER + " INTEGER ) ";
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIGNBOARD);
@@ -135,8 +137,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         customer.setComment(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_COMMENT)));
         customer.setLat(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_LAT)));
         customer.setLong(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_LONG)));
-        customer.setLong(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_LONG)));
         customer.setCategory(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_CATEGORY)));
+        customer.setIsPushed(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_PUSHEDTOSERVER)));
         customer.setImagePath(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_IMAGE_PATH)));
         return customer;
     }
@@ -218,5 +220,38 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
         }
         return flag;
+    }
+
+    public void setPushedTrue(long id)
+    {
+
+        //Lock database for writing
+        synchronized (databaseLock) {
+            ContentValues cv = new ContentValues();
+            cv.put(Constants.COLUMN_PUSHEDTOSERVER, 1);
+            //Get a writable database
+            SQLiteDatabase database = getWritableDatabase();
+
+            //Ensure the database exists
+            if (database != null) {
+
+                try {
+//                    database.update(TABLE_SIGNBOARD,cv,"username = ?",new String[]{r.getUname()});
+                   int t=  database.update(TABLE_SIGNBOARD, cv, Constants.COLUMN_SIGNBOARD_ID + " = ?" ,new String[]{String.valueOf(id)});
+                    Log.d(TAG,"Number of Updated record are "+String.valueOf(t)+ " for id " +String.valueOf(id));
+
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Unable to Update Signboards " + e.getMessage());
+
+                }
+                //Close database connection
+
+                database.close();
+            }
+        }
+        return;
+
+
     }
 }

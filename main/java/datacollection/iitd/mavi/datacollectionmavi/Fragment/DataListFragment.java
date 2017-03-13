@@ -57,7 +57,7 @@ public class DataListFragment extends Fragment  {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-   private String TAG="DATA List Fragment";
+    private String TAG="DATA List Fragment";
 
 
     private List<SignBoard> mSignboard;
@@ -66,6 +66,7 @@ public class DataListFragment extends Fragment  {
     private SignBoardDataRecyclerViewAdapter mAdapter;
     private boolean mIsLock=false;
     RequestQueue mQueue  ;
+    ArrayList<String > mSuccesIds;
 
 
 
@@ -152,13 +153,13 @@ public class DataListFragment extends Fragment  {
 
     }
 
-  public  void  deleteSignboard( long id)
-  {
-      db.deleteSignboard(id);
-      reLoadListData();
+    public  void  deleteSignboard( long id)
+    {
+        db.deleteSignboard(id);
+        reLoadListData();
 
 
-  }
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -185,19 +186,24 @@ public class DataListFragment extends Fragment  {
             @Override
             public void run() {
                 mIsLock=true;
+                mSuccesIds= new ArrayList<>();
 
                 List <SignBoard> signBoards=db.getUnPushedCustomers();
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
                 String url= "http://"+ pref.getString("ip","Ip not set")+ Constants.DATA_URL;
                 String token=pref.getString("token","tokennoteset");
+                boolean delete_pref=pref.getBoolean("deletelocal",false);
 
 
                 for(SignBoard signBoard : signBoards)
                 {
-                    mQueue.add(createRequestObject(signBoard,url ,token));
+                    mQueue.add(createRequestObject(signBoard,url ,token,delete_pref));
+//                    Log.d(TAG,String.valueOf(signBoard.getIsPushed()));
+//                    db.setPushedTrue(signBoard.getId());
 
                 }
+//                mSuccesIds=null;
 
 
                 mIsLock=false;
@@ -209,30 +215,33 @@ public class DataListFragment extends Fragment  {
 
 
     }
-    public JsonObjectRequest createRequestObject(SignBoard sb , String URL, final String token) {
+    public JsonObjectRequest createRequestObject(final SignBoard sb , String URL, final String token, final boolean pref) {
 
 
 //        Map<String, String> params = new HashMap<String, String>();
-       JSONObject params= new JSONObject();
+        JSONObject params= new JSONObject();
         try {
+
             params.put("name", sb.getName());
+            params.put("angle", String.valueOf(sb.getAngle()));
 
-        params.put("angle", String.valueOf(sb.getAngle()));
-      JSONObject location = new JSONObject();
-        location.put("lat", String.valueOf(sb.getLat()));
-        location.put("lon", String.valueOf(sb.getLong()));
-        String[] category_tags = sb.getCategory().split(",");
+            JSONObject location = new JSONObject();
+            location.put("lat", String.valueOf(sb.getLat()));
+            location.put("lon", String.valueOf(sb.getLong()));
+            params.put("location", location);
 
-        params.put("location", location);
-        params.put("category_tags", new JSONArray(category_tags));
-        String [] data = {};
-        params.put("data", new JSONArray(data));
-        params.put("image", FileUtils.getImageToBase64(sb.getImagePath()));
+            String[] category_tags = sb.getCategory().split(",");
+
+            params.put("category_tags", new JSONArray(category_tags));
+            String [] data = {};
+            params.put("data", new JSONArray(data));
+            params.put("image", FileUtils.getImageToBase64(sb.getImagePath()));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 //        params.put("image","somrandomstring");
-        Log.d("Our object", params.toString());
+//        Log.d("Our object", params.toString());
 
 
 //        String url= "http://"+ + Constants.DATA_URL;
@@ -249,11 +258,28 @@ public class DataListFragment extends Fragment  {
 
                 if (success) {
 
+
 //                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //                    SharedPreferences.Editor editor = pref.edit();
                     //Youmay check if user has asked to delete the local Stored data after pushed to Server in prefrence.
                     //Update Flag or Data Accordingly.
                     Log.d(TAG, "Doing Good");
+//                    mSuccesIds.add(String.valueOf(sb.getId()));
+                    if(pref)
+                    {
+                        db.deleteSignboard(sb.getId());
+                        Log.d(TAG,"Deleted the record");
+
+
+                    }
+                    else
+                    {
+                        db.setPushedTrue(sb.getId());
+                        Log.d(TAG,"updated the record");
+
+                    }
+
+
 
 
                 } else {

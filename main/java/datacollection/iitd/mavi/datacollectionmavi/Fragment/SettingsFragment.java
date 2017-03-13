@@ -4,6 +4,7 @@ package datacollection.iitd.mavi.datacollectionmavi.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
@@ -98,6 +99,14 @@ public class SettingsFragment extends PreferenceFragmentCompat  implements Share
             return;
         }
         SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+        if( preference instanceof CheckBoxPreference)
+        {
+            preference.setSummary(String.valueOf(sharedPrefs.getBoolean(key, false)));
+                return;
+
+        }
         preference.setSummary(sharedPrefs.getString(key, "Default"));
+
+
     }
 }
