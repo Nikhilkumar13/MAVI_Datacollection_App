@@ -195,7 +195,8 @@ public class DataListFragment extends Fragment  {
                 public void run() {
                     mIsLock = true;
                     String ip=pref.getString("ip","Ip Not Set");
-//                    isConnection(ip,80)
+//                    isConnection(ip,80);
+                    //Check wheather connection is up or not.
 
                     if(true) {
 

@@ -14,6 +14,10 @@ import android.provider.MediaStore;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -220,21 +224,30 @@ public class FileUtils {
         // Return sample size.
         return inSampleSize;
     }
-    public static String getImageToBase64(String path){
-        Bitmap bm = null;
-        ByteArrayOutputStream baos = null;
-        byte[] b = null;
-        String encodeString = null;
-        try{
-            bm = BitmapFactory.decodeFile(path);
-            baos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            b = baos.toByteArray();
-            encodeString = Base64.encodeToString(b, Base64.DEFAULT);
-        }catch (Exception e){
+
+
+    public static String getImageToBase64(String path)  {
+        byte[] bytes = new byte[0];
+        try {
+            bytes = fileToByteArray(path);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return encodeString;
+        return Base64.encodeToString(bytes,Base64.DEFAULT);
+    }
+
+    public static byte[] fileToByteArray(String path) throws IOException {
+        File imagefile = new File(path);
+        byte[] data = new byte[(int) imagefile.length()];
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(imagefile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        fis.read(data);
+        fis.close();
+        return data;
     }
 
 
