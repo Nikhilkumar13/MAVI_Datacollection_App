@@ -129,7 +129,7 @@ public class SignBoard  implements Serializable{
 
     public Drawable getThumbnail(Context context) {
 
-        return getScaledImage(context, 128, 128);
+        return getScaledImage(context, 64, 64);
     }
 
 

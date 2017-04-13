@@ -1,11 +1,15 @@
 package datacollection.iitd.mavi.datacollectionmavi.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +19,19 @@ import android.widget.Toast;
 
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.DataListFragment.OnListFragmentInteractionListener;
 import datacollection.iitd.mavi.datacollectionmavi.Fragment.PopUpDialogFragment;
+import datacollection.iitd.mavi.datacollectionmavi.Helper.FileUtils;
 import datacollection.iitd.mavi.datacollectionmavi.Model.SignBoard;
 import datacollection.iitd.mavi.datacollectionmavi.R;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 
 
 public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignBoardDataRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG =  "SIGNBOARDADAAPTER";
+    private final LruCache<String, Bitmap> mLruCache;
     private  List<SignBoard> mSignboard;
     private final OnListFragmentInteractionListener mListener;
     private Context mContext;
@@ -32,6 +40,25 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
         mSignboard = items;
         mListener = listener;
         mContext=context;
+
+        //Find out maximum memory available to application
+        //1024 is used because LruCache constructor takes int in kilobytes
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        // Use 1/4th of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 4;
+        Log.d(TAG, "max memory " + maxMemory + " cache size " + cacheSize);
+
+        // LruCache takes key-value pair in constructor
+        // key is the string to refer bitmap
+        // value is the stored bitmap
+        mLruCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in kilobytes
+                return bitmap.getByteCount() / 1024;
+            }
+        };
     }
 
     @Override
@@ -40,13 +67,28 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
         return new ViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-
         SignBoard sb= mSignboard.get(position);
+
+
+        Bitmap thumbnailImage = null;
+        String imageKey=sb.getImagePath();
+        thumbnailImage = getBitmapFromMemCache(imageKey);
+
+        if (thumbnailImage == null){
+            // if asked thumbnail is not present it will be put into cache
+            BitmapWorkerTask task = new BitmapWorkerTask(holder.Thumbnail);
+            task.execute(imageKey);
+        }
+
+
+
         holder.Name.setText(sb.getName());
         holder.Comment.setText(sb.getComment());
-        holder.Thumbnail.setImageDrawable(sb.getThumbnail(mContext));
+        holder.Thumbnail.setImageBitmap(thumbnailImage);
         holder.mView.setTag(position);
         if(sb.getIsPushed()==1)
         {
@@ -89,6 +131,17 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
 
             }
 
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mLruCache.put(key, bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mLruCache.get(key);
+    }
+
+
 
 
     @Override
@@ -130,5 +183,33 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
         }
 
 
+    }
+
+    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+
+        private final WeakReference<ImageView> imageViewReference;
+
+        public BitmapWorkerTask(ImageView imageView) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<ImageView>(imageView);
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            final Bitmap bitmap = FileUtils.getResizedBitmap(params[0],128,128);
+            addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
+            return bitmap;
+        }
+
+        //  onPostExecute() sets the bitmap fetched by doInBackground();
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = (ImageView)imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
     }
 }
