@@ -40,9 +40,9 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
                     android:hint="Align your moblie | to SignBoard"
-                    android:ems="10"
+                    android:textSize="20dp"
+                    android:textColor="@color/cast_expanded_controller_background_color"
                     android:id="@+id/compass_textview" />
                 <android.support.v7.widget.AppCompatEditText
                     android:layout_marginLeft="10dp"
@@ -52,6 +52,14 @@
                     android:layout_weight="1"
                     android:hint="Take Reading"
                     android:id="@+id/angle_edittext"
+                    android:inputType="phone"/>
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Radius"
+                    android:id="@+id/radius_edittext"
                     android:inputType="phone"/>
 
 

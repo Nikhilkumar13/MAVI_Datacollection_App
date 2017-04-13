@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -29,6 +31,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -65,7 +70,7 @@ public class DataListFragment extends Fragment  {
 
     private SignBoardDataRecyclerViewAdapter mAdapter;
     private boolean mIsLock=false;
-    RequestQueue mQueue  ;
+    private static  RequestQueue mQueue  ;
     ArrayList<String > mSuccesIds;
 
 
@@ -180,38 +185,51 @@ public class DataListFragment extends Fragment  {
     {
 
         Toast.makeText(getContext(),"Trying to Push UnPushed Data to Server",Toast.LENGTH_LONG).show();
-
-        Thread tr= new Thread()
-        {
-            @Override
-            public void run() {
-                mIsLock=true;
-                mSuccesIds= new ArrayList<>();
-
-                List <SignBoard> signBoards=db.getUnPushedCustomers();
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-                String url= "http://"+ pref.getString("ip","Ip not set")+ Constants.DATA_URL;
-                String token=pref.getString("token","tokennoteset");
-                boolean delete_pref=pref.getBoolean("deletelocal",false);
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
 
-                for(SignBoard signBoard : signBoards)
-                {
-                    mQueue.add(createRequestObject(signBoard,url ,token,delete_pref));
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mIsLock = true;
+                    String ip=pref.getString("ip","Ip Not Set");
+//                    isConnection(ip,80)
+
+                    if(true) {
+
+                    mSuccesIds = new ArrayList<>();
+
+                    List<SignBoard> signBoards = db.getUnPushedCustomers();
+
+                    String url = "http://" + pref.getString("ip", "Ip not set") + Constants.DATA_URL;
+                    String token = pref.getString("token", "tokennoteset");
+                    boolean delete_pref = pref.getBoolean("deletelocal", false);
+
+
+                    for (SignBoard signBoard : signBoards) {
+                        mQueue.add(createRequestObject(signBoard, url, token, delete_pref));
 //                    Log.d(TAG,String.valueOf(signBoard.getIsPushed()));
 //                    db.setPushedTrue(signBoard.getId());
 
-                }
+                    }
 //                mSuccesIds=null;
 
 
-                mIsLock=false;
+                    mIsLock = false;
+                    }
+                    else
+                    {
+                        Toast.makeText(getContext(),"Unable to reach Server at "+ip,Toast.LENGTH_LONG).show();
+                    }
 
 
-            }
-        };
-        tr.start();
+                }
+
+            });
+
+
 
 
     }
@@ -224,6 +242,7 @@ public class DataListFragment extends Fragment  {
 
             params.put("name", sb.getName());
             params.put("angle", String.valueOf(sb.getAngle()));
+            params.put("radius", String.valueOf(sb.getAngle()));
 
             JSONObject location = new JSONObject();
             location.put("lat", String.valueOf(sb.getLat()));
@@ -347,5 +366,26 @@ public class DataListFragment extends Fragment  {
 
     public void displayMessage(String toastString){
         Toast.makeText(getContext(), toastString, Toast.LENGTH_LONG).show();
+    }
+
+    public  boolean isConnection(String ip,int port)
+    {
+        boolean exists = false;
+
+        try {
+            SocketAddress sockaddr = new InetSocketAddress(ip, port);
+            // Create an unbound socket
+            Socket sock = new Socket();
+
+            // This method will block no more than timeoutMs.
+            // If the timeout occurs, SocketTimeoutException is thrown.
+            int timeoutMs = 2000;   // 2 seconds
+            sock.connect(sockaddr, timeoutMs);
+            exists = true;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return exists;
     }
 }

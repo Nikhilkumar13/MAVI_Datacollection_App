@@ -19,6 +19,7 @@ public class Constants {
     public static final String COLUMN_SIGNBOARD_ID = "_id";
     public static final String COLUMN_NAME= "name";
     public static final String COLUMN_ANGLE = "angle";
+    public static final String COLUMN_RADIUS= "radius";
     public static final String COLUMN_LAT = "lat";
     public static final String COLUMN_LONG = "lng";
     public static final String COLUMN_COMMENT = "comment";
@@ -37,7 +38,7 @@ public class Constants {
 
     public static final int DEFAULT_IMAGE_RESOURCE = R.drawable.default_customer_picture;
     public static final String PICTURE_DIRECTORY = Environment.getExternalStorageDirectory()
-            + File.separator + "DCIM" + File.separator + "ProfilePicture" + File.separator;
+            + File.separator + "DCIM" + File.separator + "SignBoardPicture" + File.separator;
 
     public static final String LOGIN_URL="/mavi/api/obtain-token/";
     public static final String DATA_URL="/mavi/api/signboards";

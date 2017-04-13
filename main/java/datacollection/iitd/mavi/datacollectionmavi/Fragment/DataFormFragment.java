@@ -62,7 +62,7 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private Sensor mCompass;
-    private TextView mSenserTextView ,mNameEditText ,mAngleEditText, mCommentEditText ,mPlaceEditText, mCategoryEditText;
+    private TextView mSenserTextView ,mNameEditText ,mAngleEditText, mCommentEditText ,mPlaceEditText, mCategoryEditText,mRadiusEditText;;
     private  Button mSaveButton ,mPlacePickerButton;
     //Image properties
     private String mCurrentImagePath = null;
@@ -85,6 +85,7 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
         mNameEditText = (TextView) mRootView.findViewById(R.id.signboard_name_edittext);
         mCategoryEditText = (TextView) mRootView.findViewById(R.id.category_edittext);
         mAngleEditText= (TextView) mRootView.findViewById(R.id.angle_edittext);
+        mRadiusEditText= (TextView) mRootView.findViewById(R.id.radius_edittext);
         mCommentEditText= (TextView) mRootView.findViewById(R.id.comment_edittext);
         mPlaceEditText= (TextView) mRootView.findViewById(R.id.place_edittext);
         mImageButton= (ImageButton) mRootView.findViewById(R.id.signboard_image_button);
@@ -221,11 +222,11 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        float azimuth = Math.round(event.values[0]);
+        int azimuth = Math.round(event.values[0]);
         // The other values provided are:
         //  float pitch = event.values[1];
         //  float roll = event.values[2];
-        mSenserTextView.setText("Azimuth: " + Float.toString(azimuth));
+        mSenserTextView.setText("Angle: " + String.valueOf(azimuth));
 
     }
 
@@ -274,6 +275,7 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
         mSignboard.setName(mNameEditText.getText().toString());
         mSignboard.setComment(mCommentEditText.getText().toString());
         mSignboard.setAngle(Integer.valueOf(mAngleEditText.getText().toString()));
+        mSignboard.setRadius(Integer.valueOf(mRadiusEditText.getText().toString()));
         mSignboard.setLat(String.valueOf(mPlace.getLatLng().latitude));
         mSignboard.setLong(String.valueOf(mPlace.getLatLng().longitude));
         mSignboard.setCategory(mCategoryEditText.getText().toString().toLowerCase());

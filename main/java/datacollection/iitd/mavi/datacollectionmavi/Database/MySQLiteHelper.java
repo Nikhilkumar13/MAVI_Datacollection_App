@@ -47,12 +47,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + Constants.COLUMN_SIGNBOARD_ID + " INTEGER PRIMARY KEY, "
             + Constants.COLUMN_NAME + " TEXT, "
             + Constants.COLUMN_ANGLE + " INTEGER, "
+            + Constants.COLUMN_RADIUS + " INTEGER, "
             + Constants.COLUMN_LAT + " TEXT, "
             + Constants.COLUMN_IMAGE_PATH + " TEXT, "
             + Constants.COLUMN_COMMENT + " TEXT, "
             + Constants.COLUMN_LONG + " TEXT, "
             + Constants.COLUMN_CATEGORY + " TEXT, "
-            + Constants.COLUMN_PUSHEDTOSERVER + " INTEGER ) ";
+            + Constants.COLUMN_PUSHEDTOSERVER + " INTEGER DEFAULT 0) ";
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIGNBOARD);
@@ -98,6 +99,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         //Command to select all Customers
         String selectQuery = "SELECT * FROM " + TABLE_SIGNBOARD  + " WHERE " +Constants.COLUMN_PUSHEDTOSERVER +" = 0";
+        Log.d(TAG,selectQuery);
 
         //lock database for reading
         synchronized (databaseLock) {
@@ -134,6 +136,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         customer.setId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_SIGNBOARD_ID)));
         customer.setName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_NAME)));
         customer.setAngle(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ANGLE)));
+        customer.setRadius(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_RADIUS)));
         customer.setComment(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_COMMENT)));
         customer.setLat(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_LAT)));
         customer.setLong(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_LONG)));

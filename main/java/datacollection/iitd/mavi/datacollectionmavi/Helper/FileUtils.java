@@ -27,7 +27,7 @@ public class FileUtils {
         Date date = new Date() ;
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
 
-        return "profile_" + customerName + "_" + timeStamp + ".jpg";
+        return "signboard_" + customerName + "_" + timeStamp + ".jpg";
     }
 
     /**

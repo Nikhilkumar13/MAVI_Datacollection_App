@@ -20,6 +20,16 @@ public class SignBoard  implements Serializable{
     private int mId;
     private String mName;
     private int mAngle;
+
+    public int getRadius() {
+        return mRadius;
+    }
+
+    public void setRadius(int mRadius) {
+        this.mRadius = mRadius;
+    }
+
+    private int mRadius;
     private String mLat;
     private String mLong;
     private String mImagePath;
