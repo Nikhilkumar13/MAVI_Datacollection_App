@@ -257,4 +257,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 
     }
+
+    public void deleteAllSignBoard(Context context) {
+        SQLiteDatabase database = getWritableDatabase();
+        if (database != null) {
+            database.delete(TABLE_SIGNBOARD,null,null);
+
+
+        }
+    }
 }

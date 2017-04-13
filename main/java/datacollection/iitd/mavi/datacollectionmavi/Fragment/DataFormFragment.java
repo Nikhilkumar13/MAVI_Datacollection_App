@@ -3,6 +3,7 @@ package datacollection.iitd.mavi.datacollectionmavi.Fragment;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -16,6 +17,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,16 +57,11 @@ import static android.app.Activity.RESULT_OK;
 public class DataFormFragment extends Fragment implements SensorEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static Button mAddMore;
-    private static LinearLayout mLayout;
-    private int mCount=0;
 
     private SensorManager mSensorManager;
     private Sensor mCompass;
-    private TextView mSenserTextView ,mNameEditText ,mAngleEditText, mCommentEditText ,mPlaceEditText, mCategoryEditText,mRadiusEditText;;
-    private  Button mSaveButton ,mPlacePickerButton;
+    private TextView mSenserTextView ,mNameEditText ,mAngleEditText, mCommentEditText ,mPlaceEditText, mCategoryEditText,mRadiusEditText, mTextViewOnImageButton;
+    private  Button mSaveButton ,mPlacePickerButton, mResetButton;
     //Image properties
     private String mCurrentImagePath = null;
     private Uri mCapturedImageURI = null;
@@ -89,7 +87,9 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
         mCommentEditText= (TextView) mRootView.findViewById(R.id.comment_edittext);
         mPlaceEditText= (TextView) mRootView.findViewById(R.id.place_edittext);
         mImageButton= (ImageButton) mRootView.findViewById(R.id.signboard_image_button);
+        mTextViewOnImageButton= (TextView) mRootView.findViewById(R.id.textview_on_image_button);
         mSaveButton = (Button) mRootView.findViewById(R.id.save_button);
+        mResetButton = (Button) mRootView.findViewById(R.id.reset_button);
         mPlacePickerButton = (Button) mRootView.findViewById(R.id.place_picker_button);
         mPlacePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,13 +117,44 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SaveSignboard();
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Confirm")
+                        .setMessage("Save this information?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                SaveSignboard();
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+
+
             }
         });
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseImage();
+            }
+        });
+        mResetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Confirm")
+                        .setMessage("Delete filled data?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                clearAll();
+
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+
             }
         });
 
@@ -156,10 +187,6 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
 
         mSignboard = new SignBoard();
         db = new MySQLiteHelper(getActivity());
@@ -226,7 +253,7 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
         // The other values provided are:
         //  float pitch = event.values[1];
         //  float roll = event.values[2];
-        mSenserTextView.setText("Angle: " + String.valueOf(azimuth));
+        mSenserTextView.setText(Html.fromHtml("Compass: " + String.valueOf(azimuth) +"<sup>"+"o"+"</sup>"));
 
     }
 
@@ -378,6 +405,7 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
             startActivityForResult(chooserIntent, Constants.ACTION_REQUEST_IMAGE);
         } else {
             mNameEditText.setError("Please enter Signboard name");
+            Toast.makeText(getContext(),"Name the Signboard first",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -416,9 +444,23 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
                 if (mCurrentImagePath != null && !mCurrentImagePath.isEmpty()) {
                     mImageButton.setImageDrawable(new BitmapDrawable(getResources(),
                             FileUtils.getResizedBitmap(mCurrentImagePath, 512, 512)));
+                    mTextViewOnImageButton.setText("");
                 }
             }
         }
+
+
+    }
+    private void clearAll()
+    {
+        mNameEditText.setText("");
+        mAngleEditText.setText("");
+        mPlaceEditText.setText("");
+        mCategoryEditText.setText("");
+        mRadiusEditText.setText("");
+        mCommentEditText.setText("");
+        mImageButton.setImageResource(android.R.color.transparent);
+        mTextViewOnImageButton.setText(R.string.text_on_image_button);
 
 
     }
@@ -429,17 +471,17 @@ public class DataFormFragment extends Fragment implements SensorEventListener {
 
         if (mNameEditText.getText() == null || mNameEditText.getText().toString().isEmpty())
         {
-            mNameEditText.setError("Provide Name");
+            mNameEditText.setError(getString(R.string.name_error));
             return false;
         }
         if (mAngleEditText.getText() == null || mAngleEditText.getText().toString().isEmpty())
         {
-            mAngleEditText.setError("Angle Missing");
+            mAngleEditText.setError(getString(R.string.angle_error));
             return  false;
         }
         if (mPlaceEditText.getText() == null || mPlaceEditText.getText().toString().isEmpty())
         {
-            mPlaceEditText.setError("Choose a Place");
+            mPlaceEditText.setError(getString(R.string.place_error));
             return  false;
 
         }

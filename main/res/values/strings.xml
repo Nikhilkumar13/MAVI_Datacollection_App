@@ -8,6 +8,8 @@
     <string name="prompt_ipaddress">Server IP Address</string>
     <string name="server_ipaddress">"192.168.43.232:8000"</string>
     <string name="push_to_server">"push to Server"</string>
+    <string name="login">/mavi/api/obtain-token/</string>
+
 
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -23,12 +25,15 @@
     <string name="pick_place_button_text">Pick A Place</string>
     <string name="title_activity_data_collect">DataCollection</string>
     <string name="action_settings">Settings</string>
+    <string name="delete">Delete all stored data</string>
     <string name="logout">Logout</string>
 
-    <string name="login">/mavi/api/obtain-token/</string>
     <string name="form_tittle">Form</string>
     <string name="stored_data_tittle">Stored Data</string>
+    <string name="text_on_image_button">Click to add image"</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name_error">Give a namestring</string>
+    <string name="angle_error">Angle is Mising</string>
+    <string name="place_error">Choose a place</string>
+    <string name="hello_blank_fragment">Blank Fragment</string>
 </resources>

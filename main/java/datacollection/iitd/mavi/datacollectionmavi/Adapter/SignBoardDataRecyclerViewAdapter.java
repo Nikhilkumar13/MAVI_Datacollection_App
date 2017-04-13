@@ -205,7 +205,7 @@ public class SignBoardDataRecyclerViewAdapter extends RecyclerView.Adapter<SignB
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if (imageViewReference != null && bitmap != null) {
-                final ImageView imageView = (ImageView)imageViewReference.get();
+                final ImageView imageView = imageViewReference.get();
                 if (imageView != null) {
                     imageView.setImageBitmap(bitmap);
                 }

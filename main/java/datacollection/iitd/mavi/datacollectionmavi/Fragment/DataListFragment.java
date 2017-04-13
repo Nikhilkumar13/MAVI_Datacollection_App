@@ -211,6 +211,8 @@ public class DataListFragment extends Fragment  {
 
                     for (SignBoard signBoard : signBoards) {
                         mQueue.add(createRequestObject(signBoard, url, token, delete_pref));
+//                        Runtime.getRuntime().gc();
+
 //                    Log.d(TAG,String.valueOf(signBoard.getIsPushed()));
 //                    db.setPushedTrue(signBoard.getId());
 
@@ -237,13 +239,13 @@ public class DataListFragment extends Fragment  {
     public JsonObjectRequest createRequestObject(final SignBoard sb , String URL, final String token, final boolean pref) {
 
 
-//        Map<String, String> params = new HashMap<String, String>();
         JSONObject params= new JSONObject();
         try {
 
             params.put("name", sb.getName());
             params.put("angle", String.valueOf(sb.getAngle()));
             params.put("radius", String.valueOf(sb.getAngle()));
+            params.put("comment", String.valueOf(sb.getComment()));
 
             JSONObject location = new JSONObject();
             location.put("lat", String.valueOf(sb.getLat()));
@@ -255,16 +257,12 @@ public class DataListFragment extends Fragment  {
             params.put("category_tags", new JSONArray(category_tags));
             String [] data = {};
             params.put("data", new JSONArray(data));
-            params.put("image", FileUtils.getImageToBase64(sb.getImagePath()));
+            StringBuilder image= new StringBuilder(FileUtils.getImageToBase64(sb.getImagePath()));
+            params.put("image", image.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        params.put("image","somrandomstring");
-//        Log.d("Our object", params.toString());
-
-
-//        String url= "http://"+ + Constants.DATA_URL;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, params, new Response.Listener<JSONObject>() {
 
@@ -284,11 +282,11 @@ public class DataListFragment extends Fragment  {
                     //Youmay check if user has asked to delete the local Stored data after pushed to Server in prefrence.
                     //Update Flag or Data Accordingly.
                     Log.d(TAG, "Doing Good");
-//                    mSuccesIds.add(String.valueOf(sb.getId()));
                     if(pref)
                     {
                         db.deleteSignboard(sb.getId());
                         Log.d(TAG,"Deleted the record");
+
 
 
                     }
@@ -298,6 +296,7 @@ public class DataListFragment extends Fragment  {
                         Log.d(TAG,"updated the record");
 
                     }
+
 
 
 
@@ -367,6 +366,11 @@ public class DataListFragment extends Fragment  {
 
     public void displayMessage(String toastString){
         Toast.makeText(getContext(), toastString, Toast.LENGTH_LONG).show();
+    }
+    public void notifyDataSetChanged()
+    {
+        mAdapter.notifyDataSetChanged();
+
     }
 
     public  boolean isConnection(String ip,int port)

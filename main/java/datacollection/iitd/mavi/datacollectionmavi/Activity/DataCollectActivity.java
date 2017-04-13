@@ -1,12 +1,15 @@
 package datacollection.iitd.mavi.datacollectionmavi.Activity;
 
 import android.app.ActivityOptions;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -66,6 +69,7 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
     private DataListFragment mdataListFragment;
     private MySQLiteHelper db;
 
+    private Context mContext;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -90,6 +94,7 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         db=  new MySQLiteHelper(this);
+        mContext=this;
 
 
     }
@@ -118,7 +123,7 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
             return true;
         }
 
-        if(id==R.id.logout)
+        if(id==R.id.menu_logout)
         {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = pref.edit();
@@ -134,6 +139,22 @@ public class DataCollectActivity extends AppCompatActivity implements DataFormFr
             mdataListFragment.pushData();
 
 
+
+        }
+        if(id==R.id.menu_delete)
+        {
+            new AlertDialog.Builder(mContext)
+                    .setTitle("Confirm")
+                    .setMessage("Delete All locally stored Data?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            db.deleteAllSignBoard(mContext);
+                            mdataListFragment.notifyDataSetChanged();
+
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
 
         }
 

@@ -11,107 +11,123 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="20dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="0">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
-            <android.support.v7.widget.AppCompatEditText
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="SignBoard name"
+                android:hint="SignBoard Name"
                 android:ems="10"
                 android:id="@+id/signboard_name_edittext" />
+        </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            >
+            <TextView
+                android:layout_weight="3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_height="match_parent"
+                android:textSize="20dp"
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
+                android:id="@+id/compass_textview" />
 
-
-                >
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Align your moblie | to SignBoard"
-                    android:textSize="20dp"
-                    android:textColor="@color/cast_expanded_controller_background_color"
-                    android:id="@+id/compass_textview" />
-                <android.support.v7.widget.AppCompatEditText
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Take Reading"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="2">
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/angle_edittext"
-                    android:inputType="phone"/>
-
-                <android.support.v7.widget.AppCompatEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Radius"
-                    android:id="@+id/radius_edittext"
+                    android:hint="Angle b/w area Vector and North pole"
                     android:inputType="phone"/>
+            </android.support.design.widget.TextInputLayout>
 
 
+        </LinearLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
-            </LinearLayout>
-
-
-
-            <LinearLayout
+            <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp">
-
-                <Button
-                    android:id="@+id/place_picker_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pick_place_button_text"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    />
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/place_edittext" />
+                android:layout_weight="1"
+                android:hint="Distance(m) till signboard is visible or relevant"
+                android:id="@+id/radius_edittext"
+                android:inputType="phone"/>
+        </android.support.design.widget.TextInputLayout>
 
 
-            </LinearLayout>
-            <android.support.v7.widget.AppCompatEditText
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+            <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/category_edittext"
-                android:hint="signboard, warning"/>
+                android:hint="Tags(e:g signboard, warning, direction)" />
+        </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatEditText
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment_edittext"
-                android:hint="Type any Note or Comment"/>
+                android:hint="Enter any Comment or Note"/>
+        </android.support.design.widget.TextInputLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            >
+
+            <Button
+                android:id="@+id/place_picker_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pick_place_button_text"
+                android:layout_weight="2"
+                />
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/place_edittext" />
+
+
+        </LinearLayout>
+
+
+
+        <FrameLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp">
             <ImageButton
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:id="@+id/signboard_image_button"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
@@ -119,16 +135,24 @@
                 android:scaleType="centerCrop"
                 android:contentDescription="SignBoard Image" />
 
-        </LinearLayout>
-
-
+            <TextView
+                android:id="@+id/textview_on_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="30dp"
+                android:clickable="false"
+                android:text="@string/text_on_image_button" >
+            </TextView>
+        </FrameLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
             android:orientation="horizontal"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp">
 
             <Button
                 android:id="@+id/reset_button"
@@ -138,7 +162,6 @@
                 android:text="@string/reset_button_text"
                 android:textStyle="bold"
                 android:layout_weight="1"
-                android:layout_marginBottom="0dp"
                 />
 
             <Button
@@ -148,7 +171,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/save_button_text"
                 android:textStyle="bold"
-                android:layout_marginBottom="0dp"
                 android:layout_weight="1"
                 />
 
@@ -156,10 +178,8 @@
 
         </LinearLayout>
 
-
-
-
     </LinearLayout>
+
 
 
 </android.support.v4.widget.NestedScrollView>
